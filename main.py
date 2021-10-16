@@ -1,7 +1,7 @@
 from typing import Optional
 from enum import Enum
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 
 class ModelName(str, Enum):
 	alexnet = "alexnet"
@@ -39,6 +39,16 @@ async def read_item(item_id: int, q: Optional[str] = None):
 		return { "item_id": item_id, "q": q }
 
 	return { "item_id": item_id }
+
+
+
+@app.get('/items/')
+async def read_query(q: Optional[str] = Query(None, max_lenght=50)):
+	result = { "items": "No item" }
+	if q:
+		return result.update({"q": q })
+
+	return result
 
 
 @app.get('/sections/{section_id}')
